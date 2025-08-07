@@ -29,8 +29,10 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 1.5rem;
-  width: 100% !important;   /* fill container */
-  box-sizing: border-box;   /* keep internal padding */
+  width: 100% !important;      /* fill container */
+  height: 100% !important;     /* attempt to consume full iframe height */
+  box-sizing: border-box;      /* keep internal padding */
+  overflow: auto;              /* scroll internally if host still clamps */
 }
 
 h1 {

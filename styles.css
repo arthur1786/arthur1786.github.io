@@ -1,53 +1,82 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const currencies = ['USD','EUR','GBP','BRL','JPY','CAD'];
-  const baseSel = document.getElementById('base');
-  const tbody   = document.querySelector('#rates tbody');
-  const updated = document.getElementById('updated');
-  const msg     = document.getElementById('msg');
+/* ─── global reset inside the iframe ─────────────────────────────── */
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: system-ui, sans-serif;
+}
 
-  /* Ask Jira to resize the iframe to our full content height */
-  function resizeToContent() {
-    try {
-      if (window.AP && typeof AP.resize === 'function') {
-        AP.resize('100%', document.documentElement.scrollHeight + 'px');
-      }
-    } catch (e) {
-      /* ignore cross-origin errors (shouldn’t happen in Separate-URL mode) */
-    }
-  }
+/* theme tokens */
+:root {
+  --bg: #f7f9fc;
+  --card: #ffffff;
+  --primary: #0052cc;
+  --muted: #6b778c;
+}
 
-  async function fetchRates(base) {
-    msg.textContent = '';
-    tbody.innerHTML = '<tr><td colspan="2">Loading…</td></tr>';
-    resizeToContent();
+body {
+  background: var(--bg);
+}
 
-    try {
-      const res  = await fetch(`https://open.er-api.com/v6/latest/${base}`);
-      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-      const data = await res.json();
-      if (data.result !== 'success') throw new Error(data.error_type);
+/* panel container */
+.panel {
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  width: 100%;               /* full sidebar width */
+  box-sizing: border-box;
+}
 
-      tbody.innerHTML = '';
-      currencies.filter(c=>c!==base).forEach(code => {
-        const rate = data.rates[code];
-        if (rate) {
-          tbody.insertAdjacentHTML(
-            'beforeend',
-            `<tr><td>${code}</td><td>${rate.toFixed(4)}</td></tr>`
-          );
-        }
-      });
-      updated.textContent = data.time_last_update_utc
-        ? `Updated ${new Date(data.time_last_update_utc).toLocaleDateString()}`
-        : '';
-    } catch (err) {
-      tbody.innerHTML = '';
-      msg.textContent = 'Failed to load rates – ' + err.message;
-    } finally {
-      resizeToContent();
-    }
-  }
+/* typography & table */
+h1 {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  color: var(--primary);
+}
 
-  baseSel.addEventListener('change', e => fetchRates(e.target.value));
-  fetchRates(baseSel.value);
-});
+label,
+select {
+  font-size: 0.875rem;
+}
+
+select {
+  width: 100%;
+  padding: 0.35rem 0.5rem;
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.35rem 0;
+}
+
+th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+tr + tr td {
+  border-top: 1px solid #eaecef;
+}
+
+#updated {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+.error {
+  color: crimson;
+  font-size: 0.875rem;
+}

@@ -1,3 +1,16 @@
+/* ====================================================================
+   FX Rates Panel • styles.css
+   Tweaks: full‑width inside ScriptRunner’s right‑context sidebar
+   ==================================================================== */
+
+/* 1 ▸ Zero‑out every outer margin & padding GitHub/Jira might apply */
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: system-ui, sans-serif;
+}
+
 :root {
   --bg: #f7f9fc;
   --card: #ffffff;
@@ -5,30 +18,19 @@
   --muted: #6b778c;
 }
 
-/*
-  RESET THE IFRAME PADDING
-  ───────────────────────
-  We strip the 2 rem padding & flex‑box centering that were useful on CodePen
-  but create gutters inside Jira’s narrow sidebar.
-*/
+/* 2 ▸ Sidebar background (optional) */
 body {
-  margin: 0;                         /* hug the sidebar edges            */
-  font-family: system-ui, sans-serif;
   background: var(--bg);
 }
 
-/*
-  PANEL NOW STRETCHES FULL WIDTH OF THE CONTAINER
-  ────────────────────────────────────────────────
-  100 % width + box‑sizing keeps our padding inside the sidebar’s 320 px.
-*/
+/* 3 ▸ Panel stretches edge‑to‑edge inside the sidebar */
 .panel {
   background: var(--card);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 1.5rem;
-  width: 100%;            /* fill the ScriptRunner sidebar */
-  box-sizing: border-box; /* include padding in width       */
+  width: 100% !important;   /* fill container */
+  box-sizing: border-box;   /* keep internal padding */
 }
 
 h1 {

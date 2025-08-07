@@ -7,26 +7,18 @@ const tbody   = document.querySelector("#rates tbody");
 const updated = document.getElementById("updated");
 const msg     = document.getElementById("msg");
 
-/**
- * Tell the host (ScriptRunner → Jira) to resize the iframe to fit content.
- * Works via Atlassian Connect's AP.resize(). Adaptavist Bridge exposes AP.
- */
+/* Resize helper */
 function resizeToContent() {
-  // Some Jira versions expose AP globally; others via window.parent.
   const APobj = window.AP || (window.parent && window.parent.AP);
   if (APobj && typeof APobj.resize === "function") {
-    // Width 100%, height based on full document height
     APobj.resize("100%", document.documentElement.scrollHeight + "px");
   }
 }
 
-/**
- * Fetch and render FX rates using ExchangeRate-API (no key required).
- */
 async function fetchRates(base) {
   msg.textContent = "";
   tbody.innerHTML = "<tr><td colspan='2'>Loading…</td></tr>";
-  resizeToContent(); // ensure loading state fits too
+  resizeToContent();
 
   try {
     const res  = await fetch(`https://open.er-api.com/v6/latest/${base}`);
@@ -53,14 +45,10 @@ async function fetchRates(base) {
     tbody.innerHTML = "";
     msg.textContent = "Failed to load rates – " + err.message;
   } finally {
-    // After DOM changes, ask host to resize
     resizeToContent();
   }
 }
 
-// Initial load and change handler
 baseSel.addEventListener("change", e => fetchRates(e.target.value));
 fetchRates(baseSel.value);
-
-// Also resize once on initial DOMContentLoaded in case nothing else triggers
 resizeToContent();

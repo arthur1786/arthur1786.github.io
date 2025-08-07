@@ -4,53 +4,61 @@
   --primary: #0052cc;
   --muted: #6b778c;
 }
- 
+
+/*
+  RESET THE IFRAME PADDING
+  ───────────────────────
+  We strip the 2 rem padding & flex‑box centering that were useful on CodePen
+  but create gutters inside Jira’s narrow sidebar.
+*/
 body {
-  margin: 0;
+  margin: 0;                         /* hug the sidebar edges            */
   font-family: system-ui, sans-serif;
   background: var(--bg);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 2rem;
 }
- 
+
+/*
+  PANEL NOW STRETCHES FULL WIDTH OF THE CONTAINER
+  ────────────────────────────────────────────────
+  100 % width + box‑sizing keeps our padding inside the sidebar’s 320 px.
+*/
 .panel {
   background: var(--card);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 1.5rem;
-  width: 360px;
+  width: 100%;            /* fill the ScriptRunner sidebar */
+  box-sizing: border-box; /* include padding in width       */
 }
- 
+
 h1 {
   margin: 0 0 1rem;
   font-size: 1.25rem;
   color: var(--primary);
 }
- 
+
 label,
 select {
   font-size: 0.875rem;
 }
- 
+
 select {
   width: 100%;
   padding: 0.35rem 0.5rem;
   margin-bottom: 1rem;
 }
- 
+
 table {
   width: 100%;
   border-collapse: collapse;
 }
- 
+
 th,
 td {
   text-align: left;
   padding: 0.35rem 0;
 }
- 
+
 th {
   color: var(--muted);
   font-weight: 600;
@@ -58,18 +66,18 @@ th {
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
- 
+
 tr + tr td {
   border-top: 1px solid #eaecef;
 }
- 
+
 #updated {
   margin-top: 1rem;
   font-size: 0.75rem;
   color: var(--muted);
   text-align: right;
 }
- 
+
 .error {
   color: crimson;
   font-size: 0.875rem;

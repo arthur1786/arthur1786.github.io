@@ -1,16 +1,11 @@
-/* ====================================================================
-   FX Rates Panel • styles.css
-   Tweaks: full‑width & full‑height inside ScriptRunner’s sidebar
-   ==================================================================== */
-
-/* Zero‑out every outer margin & padding GitHub/Jira might apply */
-html,
-body {
+/* ─── global reset inside the iframe ─────────────────────────────── */
+html, body {
   margin: 0 !important;
   padding: 0 !important;
   font-family: system-ui, sans-serif;
 }
 
+/* theme tokens */
 :root {
   --bg: #f7f9fc;
   --card: #ffffff;
@@ -18,74 +13,28 @@ body {
   --muted: #6b778c;
 }
 
-/* Sidebar background (optional) */
-body {
-  background: var(--bg);
-}
+body { background: var(--bg); }
 
-/* Panel stretches edge‑to‑edge & top‑to‑bottom inside the iframe */
+/* panel container */
 .panel {
   background: var(--card);
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   padding: 1.5rem;
-  width: 100% !important;
-  height: 100% !important;
+  width: 100%;          /* full sidebar width */
   box-sizing: border-box;
-  overflow: auto; /* scrolls internally if Jira clamps iframe */
 }
 
-h1 {
-  margin: 0 0 1rem;
-  font-size: 1.25rem;
-  color: var(--primary);
-}
+/* typography & table */
+h1 { margin: 0 0 1rem; font-size: 1.25rem; color: var(--primary); }
 
-label,
-select {
-  font-size: 0.875rem;
-}
+label, select { font-size: 0.875rem; }
+select { width:100%; padding:0.35rem 0.5rem; margin-bottom:1rem; }
 
-select {
-  width: 100%;
-  padding: 0.35rem 0.5rem;
-  margin-bottom: 1rem;
-   heigh: 100%;
+table { width:100%; border-collapse:collapse; }
+th, td { text-align:left; padding:0.35rem 0; }
+th { color:var(--muted); font-weight:600; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.03em; }
+tr+tr td { border-top:1px solid #eaecef; }
 
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-   heigh: 100%;
-}
-
-th,
-td {
-  text-align: left;
-  padding: 0.35rem 0;
-}
-
-th {
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-tr + tr td {
-  border-top: 1px solid #eaecef;
-}
-
-#updated {
-  margin-top: 1rem;
-  font-size: 0.75rem;
-  color: var(--muted);
-  text-align: right;
-}
-
-.error {
-  color: crimson;
-  font-size: 0.875rem;
-}
+#updated { margin-top:1rem; font-size:0.75rem; color:var(--muted); text-align:right; }
+.error   { color:crimson; font-size:0.875rem; }

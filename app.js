@@ -20,12 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(r => r.json())
     .then(data => {
       if (data.result !== 'success') throw new Error(data.error_type);
-      // build a simple map of codes → numbers
+      // build a simple map of codes → **inverted** numbers
       currencies.forEach(c => {
-        rates[c] = data.rates[apiMap[c]] ?? null;
+        const raw = data.rates[apiMap[c]];
+        rates[c] = raw ? 1 / raw : null;
       });
       updatedEl.textContent = data.time_last_update_utc
-        ? `Updated ${new Date(data.time_last_update_utc).toLocaleDateString(undefined,{dateStyle:'medium'})}`
+        ? `Updated ${new Date(data.time_last_update_utc)
+            .toLocaleDateString(undefined,{dateStyle:'medium'})}`
         : '';
 
       showCurrent();  // render the first

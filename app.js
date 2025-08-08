@@ -1,86 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
-  /* ─── config ─────────────────────────────────────────────────── */
   const BASE       = 'USD';
   const currencies = ['EUR','GBP','CAD','AUD','WON','YEN','BRL','SEK','CHF','DKK','NOK'];
-  const apiCodeOf  = {
-    EUR:'EUR', GBP:'GBP', CAD:'CAD', AUD:'AUD',
-    WON:'KRW', YEN:'JPY', BRL:'BRL', SEK:'SEK',
-    CHF:'CHF', DKK:'DKK', NOK:'NOK'
-  };
+  const apiMap     = { EUR:'EUR', GBP:'GBP', CAD:'CAD', AUD:'AUD',
+                       WON:'KRW', YEN:'JPY', BRL:'BRL', SEK:'SEK',
+                       CHF:'CHF', DKK:'DKK', NOK:'NOK' };
 
-  /* ─── DOM refs ───────────────────────────────────────────────── */
-  const carousel = document.getElementById('carousel');
-  const wrapper  = document.querySelector('.carousel-wrapper');
-  const prevBtn  = document.getElementById('prev');
-  const nextBtn  = document.getElementById('next');
-  const updated  = document.getElementById('updated');
-  const msg      = document.getElementById('msg');
+  const codeEl    = document.getElementById('slide-code');
+  const rateEl    = document.getElementById('slide-rate');
+  const updatedEl = document.getElementById('updated');
+  const msgEl     = document.getElementById('msg');
+  const prevBtn   = document.getElementById('prev');
+  const nextBtn   = document.getElementById('next');
 
-  /* ─── build slides ───────────────────────────────────────────── */
-  currencies.forEach(code => {
-    carousel.insertAdjacentHTML('beforeend', `
-      <div class="slide">
-        <span class="code">${code}</span>
-        <span class="rate" id="rate-${code}">--</span>
-      </div>
-    `);
-  });
+  let rates = {};
+  let idx   = 0;
 
-  const slides = Array.from(carousel.children);
-
-  /* ─── size slides exactly to wrapper ─────────────────────────── */
-  function sizeSlides() {
-    const width  = wrapper.clientWidth;
-    const height = wrapper.clientHeight;
-    slides.forEach(slide => {
-      slide.style.width  = `${width}px`;
-      slide.style.height = `${height}px`;
-    });
-  }
-
-  window.addEventListener('resize', () => {
-    sizeSlides();
-    // re-center on the current slide
-    showSlide(currentIndex);
-  });
-
-  /* ─── fetch + render rates ───────────────────────────────────── */
-  async function fetchRates() {
-    try {
-      msg.textContent = '';
-      const res  = await fetch(`https://open.er-api.com/v6/latest/${BASE}`);
-      if (!res.ok) throw new Error(res.statusText);
-      const data = await res.json();
+  // fetch rates once
+  fetch(`https://open.er-api.com/v6/latest/${BASE}`)
+    .then(r => r.json())
+    .then(data => {
       if (data.result !== 'success') throw new Error(data.error_type);
-
-      currencies.forEach(code => {
-        const r = data.rates[apiCodeOf[code]];
-        document.getElementById(`rate-${code}`).textContent = r ? r.toFixed(4) : 'N/A';
+      // build a simple map of codes → numbers
+      currencies.forEach(c => {
+        rates[c] = data.rates[apiMap[c]] ?? null;
       });
-
-      updated.textContent = data.time_last_update_utc
-        ? `Updated ${new Date(data.time_last_update_utc)
-            .toLocaleDateString(undefined, { dateStyle: 'medium' })}`
+      updatedEl.textContent = data.time_last_update_utc
+        ? `Updated ${new Date(data.time_last_update_utc).toLocaleDateString(undefined,{dateStyle:'medium'})}`
         : '';
-    } catch (err) {
-      msg.textContent = 'Failed to load rates – ' + err.message;
-    }
+
+      showCurrent();  // render the first
+    })
+    .catch(err => {
+      msgEl.textContent = 'Failed to load rates – ' + err.message;
+    });
+
+  function showCurrent() {
+    const code = currencies[idx];
+    const val  = rates[code];
+    codeEl.textContent = code;
+    rateEl.textContent = val !== null ? val.toFixed(4) : 'N/A';
   }
 
-  /* ─── carousel logic ─────────────────────────────────────────── */
-  let currentIndex = 0;
-  function showSlide(i) {
-    currentIndex = (i + slides.length) % slides.length;
-    const offset = wrapper.clientWidth * currentIndex;
-    carousel.style.transform = `translateX(-${offset}px)`;
-  }
+  prevBtn.addEventListener('click', () => {
+    idx = (idx - 1 + currencies.length) % currencies.length;
+    showCurrent();
+  });
 
-  prevBtn.addEventListener('click', () => showSlide(currentIndex - 1));
-  nextBtn.addEventListener('click', () => showSlide(currentIndex + 1));
-
-  /* ─── init ───────────────────────────────────────────────────── */
-  fetchRates().then(() => {
-    sizeSlides();
-    showSlide(0);
+  nextBtn.addEventListener('click', () => {
+    idx = (idx + 1) % currencies.length;
+    showCurrent();
   });
 });

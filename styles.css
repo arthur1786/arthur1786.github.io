@@ -23,7 +23,7 @@ body {
 
 .panel {
   width: 360px;
-  height: 250px;
+  height: 200px;             /* now 200px tall */
   background: var(--card);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
@@ -36,7 +36,7 @@ body {
 h1 {
   font-size: 1.25rem;
   color: var(--primary);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;     /* slightly tighter */
   text-align: center;
 }
 
@@ -50,14 +50,17 @@ h1 {
 }
 
 .carousel {
+  flex: 1 0 auto;
   display: flex;
-  transition: transform 0.3s ease;
   height: 100%;
+  overflow: visible;
+  transition: transform 0.3s ease;
 }
 
 .slide {
-  height: 100%;
   flex: 0 0 auto;
+  width: 100%;               /* JS will size these exactly */
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -103,12 +106,12 @@ h1 {
   font-size: 0.75rem;
   color: var(--muted);
   text-align: right;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;       /* tighter gap */
 }
 
 .error {
   font-size: 0.875rem;
   color: crimson;
   text-align: center;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
 }

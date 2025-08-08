@@ -1,21 +1,28 @@
-<div class="panel">
-  <h1>🌍 FX Rates</h1>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FX Rates ▸ vs USD</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="panel">
+    <h1>🌍 FX Rates (vs USD)</h1>
 
-  <label for="base">Base currency</label>
-  <select id="base">
-    <option value="USD">USD – US Dollar</option>
-    <option value="EUR">EUR – Euro</option>
-    <option value="GBP">GBP – Pound</option>
-    <option value="BRL">BRL – Brazilian Real</option>
-    <option value="JPY">JPY – Yen</option>
-    <option value="CAD">CAD – Canadian Dollar</option>
-  </select>
+    <!-- ――― slide-carousel ――― -->
+    <div class="carousel-wrapper">
+      <button id="prev" class="nav" aria-label="Previous currency">‹</button>
 
-  <table id="rates">
-    <thead><tr><th>Currency</th><th>Rate</th></tr></thead>
-    <tbody></tbody>
-  </table>
+      <div id="carousel" class="carousel">
+        <!-- slides injected by app.js -->
+      </div>
 
-  <div id="updated"></div>
-  <div id="msg" class="error"></div>
-</div>
+      <button id="next" class="nav" aria-label="Next currency">›</button>
+    </div>
+
+    <div id="updated"></div>
+    <div id="msg" class="error"></div>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
